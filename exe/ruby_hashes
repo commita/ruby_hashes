@@ -1,0 +1,25 @@
+#!/usr/bin/env ruby
+
+require "ruby_hashes"
+
+def usage(options={})
+  printf(<<-EOF.gsub(/^ {2}/m, ''), $0)
+    Usage: %s <filename.rb>
+  EOF
+
+  if options[:exit]
+    exit Fixnum === options[:exit] ? options[:exit] : 0
+  end
+end
+
+if ARGV.size == 0
+  usage(exit: 1)
+end
+
+if ARGV.include?("-h")
+  usage(exit: 0)
+end
+
+code = File.read(ARGV.first)
+converter = RubyHashes::Converter.new(code, filename: ARGV.first)
+puts converter.to_new_style
