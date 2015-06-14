@@ -20,6 +20,13 @@ if ARGV.include?("-h")
   usage(exit: 0)
 end
 
-code = File.read(ARGV.first)
-converter = RubyHashes::Converter.new(code, filename: ARGV.first)
+if ARGV.first == "-"
+  code = STDIN.read
+  filename = "(stdin)"
+else
+  code = File.read(ARGV.first)
+  filename = ARGV.first
+end
+
+converter = RubyHashes::Converter.new(code, filename: filename)
 puts converter.to_new_style
